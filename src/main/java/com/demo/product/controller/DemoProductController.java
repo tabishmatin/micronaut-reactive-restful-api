@@ -1,4 +1,4 @@
-package com.demo.product;
+package com.demo.product.controller;
 
 import io.micronaut.http.annotation.*;
 
