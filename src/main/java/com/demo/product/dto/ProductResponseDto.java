@@ -1,7 +1,6 @@
-package com.demo.product.entity;
+package com.demo.product.dto;
 
-import io.micronaut.data.annotation.Id;
-import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.core.annotation.Introspected;
 import lombok.*;
 
 @Data
@@ -11,11 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 
-@MappedEntity("product")
-public class Product {
-
-    @Id
-    private String id;
+@Introspected
+public class ProductResponseDto {
 
     private String productId;
     private String productName;
