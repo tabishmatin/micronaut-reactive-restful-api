@@ -13,3 +13,6 @@ netty:
   default:
     allocator:
       max-order: 3
+mongodb:
+  uri: mongodb://localhost:27017/micronaut-reactive-product
+  database: micronaut-reactive-product
