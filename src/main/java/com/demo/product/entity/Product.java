@@ -3,6 +3,7 @@ package com.demo.product.entity;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import lombok.*;
+import org.bson.types.ObjectId;
 
 @Data
 @Getter
@@ -11,11 +12,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 
-@MappedEntity("product")
+@MappedEntity("Product")
 public class Product {
 
     @Id
-    private String id;
+    private ObjectId id;
 
     private String productId;
     private String productName;

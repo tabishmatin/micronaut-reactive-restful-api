@@ -13,7 +13,6 @@ import lombok.*;
 @Introspected
 public class ProductRequestDto {
 
-    private String productId;
     private String productName;
     private Float price;
     private Integer stockQuantity;
