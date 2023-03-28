@@ -9,7 +9,6 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.exceptions.HttpStatusException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -59,22 +58,62 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<ProductResponseDto> getProductById(String productId) {
-        return null;
+        return productRepository.findByProductId(productId)
+                .map(product -> ProductResponseDto.builder()
+                        .productId(productId)
+                        .productName(product.getProductName())
+                        .price(product.getPrice())
+                        .stockQuantity(product.getStockQuantity())
+                        .createdAt(product.getCreatedAt())
+                        .modifiedAt(product.getModifiedAt())
+                        .build());
     }
 
     @Override
     public Mono<ProductResponseDto> getProductByName(String productName) {
-        return null;
+        return productRepository.findByProductName(productName)
+                .map(product -> ProductResponseDto.builder()
+                        .productId(product.getProductId())
+                        .productName(product.getProductName())
+                        .price(product.getPrice())
+                        .stockQuantity(product.getStockQuantity())
+                        .createdAt(product.getCreatedAt())
+                        .modifiedAt(product.getModifiedAt())
+                        .build());
     }
 
     @Override
     public Flux<ProductResponseDto> getAllProducts() {
-        return null;
+        return productRepository.findAll()
+                .map(product -> ProductResponseDto.builder()
+                        .productId(product.getProductId())
+                        .productName(product.getProductName())
+                        .price(product.getPrice())
+                        .stockQuantity(product.getStockQuantity())
+                        .createdAt(product.getCreatedAt())
+                        .modifiedAt(product.getModifiedAt())
+                        .build());
     }
 
     @Override
-    public Mono<ProductResponseDto> updateProductById(String productId) {
-        return null;
+    public Mono<ProductResponseDto> updateProductById(String productId, ProductRequestDto dto) {
+        return productRepository.findByProductId(productId)
+                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, "Product with the given ID does not exist")))
+                .flatMap(product -> productRepository.update(Product.builder()
+                                .productName(dto.getProductName() == null ? product.getProductName() : dto.getProductName())
+                                .price(dto.getPrice() == null ? product.getPrice() : dto.getPrice())
+                                .stockQuantity(dto.getStockQuantity() == null ? product.getStockQuantity() : dto.getStockQuantity())
+                                .createdAt(product.getCreatedAt())
+                                .modifiedAt(currDateAsString())
+                                .build())
+                        .map(savedProduct -> ProductResponseDto.builder()
+                                .productId(savedProduct.getProductId())
+                                .productName(savedProduct.getProductName())
+                                .price(savedProduct.getPrice())
+                                .stockQuantity(savedProduct.getStockQuantity())
+                                .createdAt(savedProduct.getCreatedAt())
+                                .modifiedAt(savedProduct.getModifiedAt())
+                                .build()));
     }
 
     @Override

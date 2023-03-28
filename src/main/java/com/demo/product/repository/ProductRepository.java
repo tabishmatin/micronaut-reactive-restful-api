@@ -10,4 +10,5 @@ import reactor.core.publisher.Mono;
 public interface ProductRepository extends ReactorCrudRepository<Product, ObjectId> {
 
     Mono<Product> findByProductName(String productName);
+    Mono<Product> findByProductId(String productId);
 }

@@ -11,7 +11,7 @@ public interface ProductService {
     Mono<ProductResponseDto> getProductById(String productId);
     Mono<ProductResponseDto> getProductByName(String productName);
     Flux<ProductResponseDto> getAllProducts();
-    Mono<ProductResponseDto> updateProductById(String productId);
+    Mono<ProductResponseDto> updateProductById(String productId, ProductRequestDto dto);
     Mono<String> deleteProductById(String productId);
 
 }
