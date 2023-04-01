@@ -1,3 +1,20 @@
+# Reactive RESTful CRUD APIs on MICRONAUT
+> Developed by _**Tabish Matin**_
+
+---
+
+A reactive (Asynchronous and Non Blocking) microservice written on **Micronaut** framework in Java (11) using **MongoDB** as the database.
+This microservice application has Swagger UI support to document all the APIs.
+
+Swagger UI is accessible on the following path on local:
+`http://localhost:8080/swagger-ui/`
+
+---
+
+## -- Plugins Documentations --
+
+
+
 ## Micronaut 3.8.7 Documentation
 
 - [User Guide](https://docs.micronaut.io/3.8.7/guide/index.html)
