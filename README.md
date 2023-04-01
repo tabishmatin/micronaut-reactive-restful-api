@@ -9,6 +9,9 @@ This microservice application has Swagger UI support to document all the APIs.
 Swagger UI is accessible on the following path on local:
 `http://localhost:8080/swagger-ui/`
 
+<img width="1439" src="https://user-images.githubusercontent.com/89966541/229305593-b7bb71eb-1e44-4a15-831b-d555861589a3.png">
+
+
 ---
 
 ## -- Plugins Documentations --
