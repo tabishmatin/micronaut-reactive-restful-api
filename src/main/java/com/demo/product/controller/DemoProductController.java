@@ -7,6 +7,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller("/demoProduct")
@@ -29,5 +30,17 @@ public class DemoProductController {
     @Status(HttpStatus.ACCEPTED)
     Mono<ProductResponseDto> getProductById(@NonNull @PathVariable("product-id") String productId) {
         return productService.getProductById(productId);
+    }
+
+    @Get("/{product-name}")
+    @Status(HttpStatus.ACCEPTED)
+    Mono<ProductResponseDto> getProductByName(@NonNull @PathVariable("product-name") String productName) {
+        return productService.getProductByName(productName);
+    }
+
+    @Get
+    @Status(HttpStatus.ACCEPTED)
+    Flux<ProductResponseDto> getAllProducts() {
+        return productService.getAllProducts();
     }
 }

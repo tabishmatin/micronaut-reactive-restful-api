@@ -118,6 +118,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<String> deleteProductById(String productId) {
-        return null;
+        return productRepository.deleteByProductId(productId)
+                .flatMap(deleted -> Mono.just("Product with Product ID " + productId + " deleted successfully."))
+                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, "Product with the given ID does not exist")));
     }
 }
