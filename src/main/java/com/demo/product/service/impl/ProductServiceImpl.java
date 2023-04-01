@@ -5,6 +5,7 @@ import com.demo.product.dto.ProductResponseDto;
 import com.demo.product.entity.Product;
 import com.demo.product.repository.ProductRepository;
 import com.demo.product.service.ProductService;
+import com.demo.product.util.Constants;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.exceptions.HttpStatusException;
 import jakarta.inject.Inject;
@@ -33,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Mono<Object> addProduct(ProductRequestDto productRequestDto) {
         return productRepository.findByProductName(productRequestDto.getProductName().toUpperCase())
-                .flatMap(product -> Mono.error(new HttpStatusException(HttpStatus.CONFLICT, "Product with the same name already exists")))
+                .flatMap(product -> Mono.error(new HttpStatusException(HttpStatus.CONFLICT, Constants.PRODUCT_ALREADY_EXISTS)))
                 .switchIfEmpty(Mono.defer(() -> {
                     String productId = UUID.randomUUID().toString();
                     Product product = Product.builder()
@@ -66,12 +67,13 @@ public class ProductServiceImpl implements ProductService {
                         .stockQuantity(product.getStockQuantity())
                         .createdAt(product.getCreatedAt())
                         .modifiedAt(product.getModifiedAt())
-                        .build());
+                        .build())
+                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, Constants.PRODUCT_NOT_FOUND)));
     }
 
     @Override
     public Mono<ProductResponseDto> getProductByName(String productName) {
-        return productRepository.findByProductName(productName)
+        return productRepository.findByProductName(productName.toUpperCase())
                 .map(product -> ProductResponseDto.builder()
                         .productId(product.getProductId())
                         .productName(product.getProductName())
@@ -79,7 +81,8 @@ public class ProductServiceImpl implements ProductService {
                         .stockQuantity(product.getStockQuantity())
                         .createdAt(product.getCreatedAt())
                         .modifiedAt(product.getModifiedAt())
-                        .build());
+                        .build())
+                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, Constants.PRODUCT_NOT_FOUND)));
     }
 
     @Override
@@ -98,8 +101,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Mono<ProductResponseDto> updateProductById(String productId, ProductRequestDto dto) {
         return productRepository.findByProductId(productId)
-                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, "Product with the given ID does not exist")))
+                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, Constants.PRODUCT_NOT_FOUND)))
                 .flatMap(product -> productRepository.update(Product.builder()
+                                .id(product.getId())
+                                .productId(productId)
                                 .productName(dto.getProductName() == null ? product.getProductName() : dto.getProductName())
                                 .price(dto.getPrice() == null ? product.getPrice() : dto.getPrice())
                                 .stockQuantity(dto.getStockQuantity() == null ? product.getStockQuantity() : dto.getStockQuantity())
@@ -120,6 +125,6 @@ public class ProductServiceImpl implements ProductService {
     public Mono<String> deleteProductById(String productId) {
         return productRepository.deleteByProductId(productId)
                 .flatMap(deleted -> Mono.just("Product with Product ID " + productId + " deleted successfully."))
-                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, "Product with the given ID does not exist")));
+                .switchIfEmpty(Mono.error(new HttpStatusException(HttpStatus.NOT_FOUND, Constants.PRODUCT_NOT_FOUND)));
     }
 }

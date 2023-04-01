@@ -11,5 +11,5 @@ public interface ProductRepository extends ReactorCrudRepository<Product, Object
 
     Mono<Product> findByProductName(String productName);
     Mono<Product> findByProductId(String productId);
-    Mono<Void> deleteByProductId(String productId);
+    Mono<Long> deleteByProductId(String productId);
 }
